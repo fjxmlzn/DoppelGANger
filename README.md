@@ -1,6 +1,6 @@
 # Generating High-fidelity, Synthetic   Time Series Datasets with DoppelGANger
 
-**[[paper (arXiv)]()]**
+**[[paper (arXiv)](http://arxiv.org/abs/1909.13403)]**
 **[[code](https://github.com/fjxmlzn/DoppelGANger)]**
 
 
