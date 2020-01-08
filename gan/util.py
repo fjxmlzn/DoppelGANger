@@ -1,4 +1,4 @@
-from output import OutputType, Output, Normalization
+from .output import OutputType, Output, Normalization
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -215,9 +215,11 @@ def add_gen_flag(data_feature, data_gen_flag, data_feature_outputs,
         [data_gen_flag[:, 1:, :],
          np.zeros((data_gen_flag.shape[0], 1, 1))],
         axis=1)
+    if length % sample_len != 0:
+        raise Exception("length must be a multiple of sample_len")
     data_gen_flag_t = np.reshape(
         data_gen_flag,
-        [num_sample, length / sample_len, sample_len])
+        [num_sample, int(length / sample_len), sample_len])
     data_gen_flag_t = np.sum(data_gen_flag_t, 2)
     data_gen_flag_t = data_gen_flag_t > 0.5
     data_gen_flag_t = np.repeat(data_gen_flag_t, sample_len, axis=1)

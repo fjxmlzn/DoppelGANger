@@ -2,8 +2,7 @@ config = {
     "scheduler_config": {
         "gpu": ["0"],
         "config_string_value_maxlen": 1000,
-        "result_root_folder": "../results_retraining/",
-        "temp_folder": "../temp/"
+        "result_root_folder": "../results_retraining/"
     },
 
     "global_config": {

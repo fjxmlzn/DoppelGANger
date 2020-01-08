@@ -3,7 +3,6 @@ config = {
         "gpu": ["0"],
         "config_string_value_maxlen": 1000,
         "result_root_folder": "../results/",
-        "temp_folder": "../temp_generate_data",
         "scheduler_log_file_path": "scheduler_generate_data.log",
         "log_file": "worker_generate_data.log",
         "force_rerun": True

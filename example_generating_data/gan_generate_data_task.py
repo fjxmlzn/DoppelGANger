@@ -120,7 +120,9 @@ class GANGenerateDataTask(GPUTask):
                 (self._config["generate_num_train_sample"] +
                  self._config["generate_num_test_sample"])
 
-            length = data_feature.shape[1] / sample_len
+            if data_feature.shape[1] % sample_len != 0:
+                raise Exception("length must be a multiple of sample_len")
+            length = int(data_feature.shape[1] / sample_len)
             real_attribute_input_noise = gan.gen_attribute_input_noise(
                 total_generate_num_sample)
             addi_attribute_input_noise = gan.gen_attribute_input_noise(

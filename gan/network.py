@@ -1,6 +1,6 @@
 import tensorflow as tf
-from op import linear, batch_norm, flatten
-from output import OutputType, Normalization
+from .op import linear, batch_norm, flatten
+from .output import OutputType, Normalization
 import numpy as np
 from enum import Enum
 import os

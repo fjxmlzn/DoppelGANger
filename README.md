@@ -9,7 +9,7 @@
 **Abstract:** Limited data access is a substantial barrier to data-driven networking research and development. Although many organizations are motivated to share data, privacy concerns often prevent the sharing of proprietary data, including between teams in the same organization and with outside stakeholders (e.g., researchers, vendors). Many researchers have therefore proposed synthetic data models, most of which have not gained traction because of their narrow scope. In this work, we present DoppelGANger, a synthetic data generation framework based on generative adversarial networks (GANs). DoppelGANger is designed to work on time series datasets with both continuous features (e.g. traffic measurements) and discrete ones (e.g., protocol name). Modeling time series and mixed-type data is known to be difficult; DoppelGANger circumvents these problems through a new conditional architecture that isolates the generation of metadata from time series, but uses metadata to strongly influence time series generation. We demonstrate the efficacy of DoppelGANger on three real-world datasets. We show that DoppelGANger achieves up to 43% better fidelity than baseline models, and captures structural properties of data that baseline methods are unable to learn. Additionally, it gives data holders an easy mechanism for protecting attributes of their data without substantial loss of data utility. 
 
 ---
-This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5, TensorFlow 1.4.0.
+This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5 and Python 3.5.2, TensorFlow 1.4.0.
 
 ## Dataset format
 To train DoppelGANger for your data, you need to prepare your data  according to the following format, which contains three files:
@@ -56,7 +56,7 @@ The datasets we used in the paper (Wikipedia Web Traffic, Google Cluster Usage T
 ## Run DoppelGANger
 The codes are based on [GPUTaskScheduler](https://github.com/fjxmlzn/GPUTaskScheduler) library, which helps you automatically schedule jobs among GPU nodes. Please install it first. You may need to change GPU configurations according to the devices you have. The configurations are set in `config*.py` in each directory. Please refer to [GPUTaskScheduler's GitHub page](https://github.com/fjxmlzn/GPUTaskScheduler) for details of how to make proper configurations.
 
-> You may also run these codes without GPUTaskScheduler. See the \_\_main\_\_ section in `doppelganger.py` for an example.
+> You may also run these codes without GPUTaskScheduler. See the `main.py` in `example_training(without_GPUTaskScheduler)` for an example.
 
 The implementation of DoppelGANger is at `gan/doppelganger.py`. You may refer to the comments in it for details. Here we provide our code for training DoppelGANger on the three datasets (Wikipedia Web Traffic, Google Cluster Usage Traces, Measuring Broadband America) in the paper, and give examples on using DoppelGANger to generate data and retraining the attribute generation network.
 
