@@ -72,10 +72,10 @@ class DoppelGANger(object):
                 samples with different length
             data_attribute: Training attributes, in numpy float32 array format.
                 The size is [(number of training samples) x (total dimension 
-                of features)]
+                of attributes)]
             real_attribute_mask: List of True/False, the length equals the 
                 number of attributes. False if the attribute is (max-min)/2 or
-                (max-min)/2, True otherwise
+                (max+min)/2, True otherwise
             data_gen_flag: Flags indicating the activation of features, in 
                 numpy float32 array format. The size is [(number of training 
                 samples) x (maximum length)]. 1 means the time series is 
