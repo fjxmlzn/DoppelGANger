@@ -50,7 +50,7 @@ class GANTask(GPUTask):
         elif self._config["initial_state"] == "random":
             initial_state = RNNInitialStateType.RANDOM
         else:
-            return NotImplementedError
+            raise NotImplementedError
         generator = DoppelGANgerGenerator(
             feed_back=self._config["feed_back"],
             noise=self._config["noise"],

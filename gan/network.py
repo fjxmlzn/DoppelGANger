@@ -11,7 +11,7 @@ class Network(object):
         self.scope_name = scope_name
 
     def build(self, input):
-        return NotImplementedError
+        raise NotImplementedError
 
     @property
     def all_vars(self):
@@ -346,7 +346,7 @@ class DoppelGANgerGenerator(Network):
                         initial_state.append(sub_initial_state)
                     initial_state = tuple(initial_state)
                 else:
-                    return NotImplementedError
+                    raise NotImplementedError
 
                 time = feature_input_noise.get_shape().as_list()[1]
                 if time is None:
