@@ -26,6 +26,7 @@ class GANGenerateDataTask(GPUTask):
         print(data_feature.shape)
         print(data_attribute.shape)
         print(data_gen_flag.shape)
+        num_real_attribute = len(data_attribute_outputs)
 
         if self._config["self_norm"]:
             (data_feature, data_attribute, data_attribute_outputs,
@@ -192,7 +193,7 @@ class GANGenerateDataTask(GPUTask):
                     features, attributes = renormalize_per_sample(
                         features, attributes, data_feature_outputs,
                         data_attribute_outputs, gen_flags,
-                        num_real_attribute=3)
+                        num_real_attribute=num_real_attribute)
                     print(features.shape)
                     print(attributes.shape)
 
