@@ -1,17 +1,22 @@
-# Generating High-fidelity, Synthetic   Time Series Datasets with DoppelGANger
+# Using GANs for Sharing Networked Time Series Data: Challenges, Initial Promise, and Open Questions
+
+Previous title:
+**Generating High-fidelity, Synthetic Time Series Datasets with DoppelGANger**
 
 **[[paper (arXiv)](http://arxiv.org/abs/1909.13403)]**
+**[[paper (IMC)]()]**
 **[[code](https://github.com/fjxmlzn/DoppelGANger)]**
 
 
 **Authors:** [Zinan Lin](http://www.andrew.cmu.edu/user/zinanl/), [Alankar Jain](https://www.linkedin.com/in/alankar-jain-5835ab5a/), [Chen Wang](https://wangchen615.github.io/), [Giulia Fanti](https://www.andrew.cmu.edu/user/gfanti/), [Vyas Sekar](https://users.ece.cmu.edu/~vsekar/)
 
-**Abstract:** Limited data access is a substantial barrier to data-driven networking research and development. Although many organizations are motivated to share data, privacy concerns often prevent the sharing of proprietary data, including between teams in the same organization and with outside stakeholders (e.g., researchers, vendors). Many researchers have therefore proposed synthetic data models, most of which have not gained traction because of their narrow scope. In this work, we present DoppelGANger, a synthetic data generation framework based on generative adversarial networks (GANs). DoppelGANger is designed to work on time series datasets with both continuous features (e.g. traffic measurements) and discrete ones (e.g., protocol name). Modeling time series and mixed-type data is known to be difficult; DoppelGANger circumvents these problems through a new conditional architecture that isolates the generation of metadata from time series, but uses metadata to strongly influence time series generation. We demonstrate the efficacy of DoppelGANger on three real-world datasets. We show that DoppelGANger achieves up to 43% better fidelity than baseline models, and captures structural properties of data that baseline methods are unable to learn. Additionally, it gives data holders an easy mechanism for protecting attributes of their data without substantial loss of data utility. 
+**Abstract:** Limited data access is a longstanding barrier to data-driven research and development in the networked systems community. In this work, we explore if and how generative adversarial networks (GANs) can be used to incentivize data sharing by enabling a generic framework for sharing synthetic datasets with minimal expert knowledge. As a specific target, our focus in this paper is on time series datasets with metadata (e.g., packet loss rate measurements with corresponding ISPs). We identify key challenges of existing GAN approaches for such workloads with respect to fidelity (e.g., long-term dependencies, complex multidimensional relationships, mode collapse) and privacy (i.e., existing guarantees are poorly understood and can sacrifice fidelity). To improve fidelity, we design a custom workflow called DoppelGANger (DG) and demonstrate that across diverse real-world datasets (e.g., bandwidth measurements, cluster requests, web sessions) and use cases (e.g., structural characterization, predictive modeling, algorithm comparison), DG achieves up to 43% better fidelity than baseline models. Although we do not resolve the privacy problem in this work, we identify fundamental challenges with both classical notions of privacy and recent advances to improve the privacy properties of GANs, and suggest a potential roadmap for addressing these challenges. By shedding light on the promise and challenges, we hope our work can rekindle the conversation on workflows for data sharing.
 
 ---
 This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5 and Python 3.5.2, TensorFlow 1.4.0.
 
 ## Dataset format
+Note that `metadata` in the paper are denoted as `attribute` in the code; `measurement` in the ppaer are denoted as `feature` in the code.
 To train DoppelGANger for your data, you need to prepare your data  according to the following format, which contains three files:
 
 * `data_feature_output.pkl`: A pickle dump of a list of `gan.output.Output` objects, indicating the dimension, type, normalization of each feature.
