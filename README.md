@@ -16,7 +16,7 @@ Previous title:
 This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5 and Python 3.5.2, TensorFlow 1.4.0.
 
 ## Dataset format
-Note that `metadata` in the paper are denoted as `attribute` in the code; `measurement` in the ppaer are denoted as `feature` in the code.
+Note that `metadata` in the paper are denoted as `attribute` in the code; `measurement` in the paper are denoted as `feature` in the code.
 To train DoppelGANger for your data, you need to prepare your data  according to the following format, which contains three files:
 
 * `data_feature_output.pkl`: A pickle dump of a list of `gan.output.Output` objects, indicating the dimension, type, normalization of each feature.
