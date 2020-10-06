@@ -89,3 +89,34 @@ python main.py
 ```
 ### Customize DoppelGANger
 You can play with the configurations (e.g., whether to have the auxiliary discriminator) in `config*.py`.
+
+The meaning of the key parameters are:
+
+* `epoch`: Number of training epochs.
+* `batch_size`: Training batch size.
+* `sample_len`: The time series batch size, i.e. the number of time steps generated at each RNN rollout (parameter S in Section 4.1).
+* `aux_disc`: Whether to have auxiliary discriminator (Section 4.3).
+* `self_norm`: Whether to do auto-normalization for each time series (Section 4.2).
+* `num_packing`: Packing degree in PacGAN (a method for solving mode collapse in NeurIPS 2018, see the [paper](https://arxiv.org/abs/1712.04086) and [code](https://github.com/fjxmlzn/PacGAN)). Setting it to 1 is equivalent to the vanilla GAN without packing.
+* `noise`: Whether to input noise at each RNN rollout.
+* `feed_back`: Whether to input the generated values from the previous rollout at each RNN rollout.
+* `g_lr`: The learning rate in Adam for training the generator
+* `d_lr`: The learning rate in Adam for training the discriminator.
+* `d_gp_coe`: Weight of gradient penalty loss in Wasserstein GAN for the discriminator.
+* `attr_d_lr`: The learning rate in Adam for training the auxiliary discriminator.
+* `attr_d_gp_coe`: Weight of gradient penalty loss in Wasserstein GAN for the auxiliary discriminator.
+* `d_rounds`: Number of discriminator steps per batch.
+* `g_rounds`: Number of generator steps per batch.
+* `gen_feature_num_layers`: Number of layers in the time series generator (RNN).
+* `gen_feature_num_units`: Number of units in each layer of the time series generator (RNN).
+* `gen_attribute_num_layers`: Number of layers in the attribute (metadata) generator.
+* `gen_attribute_num_units`: Number of units in each layer of the attribute (metadata) generator.
+* `attr_disc_num_layers`: Number of layers in the auxiliary discriminator.
+* `attr_disc_num_units`: Number of units in each layer of the auxiliary discriminator.
+* `disc_num_layers`: Number of layers in the discriminator.
+* `disc_num_units`: Number of units in each layer of the auxiliary discriminator.
+* `initial_state`: The initial state for the RNN: "random" means setting the initial state to random numbers; "zero" means setting the initial state to zeros; "variable" means setting the inital state to be learnable parameters.
+* `extra_checkpoint_freq`: The frequency of saving the trained model in a separated folder (unit: epoch).
+* `epoch_checkpoint_freq`: The frequency of saving the trained model (unit: epoch).
+* `vis_freq`: The frequency of visualizing generated samples during training (unit: training batch).
+* `vis_num_sample`: The number of samples to visualize each time during training.
