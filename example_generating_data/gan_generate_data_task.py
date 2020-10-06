@@ -52,6 +52,8 @@ class GANGenerateDataTask(GPUTask):
             initial_state = RNNInitialStateType.VARIABLE
         elif self._config["initial_state"] == "random":
             initial_state = RNNInitialStateType.RANDOM
+        elif self._config["initial_state"] == "zero":
+            initial_state = RNNInitialStateType.ZERO
         else:
             raise NotImplementedError
         generator = DoppelGANgerGenerator(
