@@ -31,7 +31,7 @@ class DoppelGANger(object):
             sample_dir: Directory to save the visualizations of generated
                 samples during training
             time_path: File path for saving epoch timestamps
-            epoch: Number of training epoch
+            epoch: Number of training epochs
             batch_size: Training batch size
             data_feature: Training features, in numpy float32 array format.
                 The size is [(number of training samples) x (maximum length) x
