@@ -15,7 +15,7 @@ Previous title:
 ## Users
 DoppelGANger has been used by several independent users/companies. Check the following links for more information:
 
-* Hazy: [Hazy builds on new technique to generate sequential and time‑series synthetic data](https://hazy.com/blog/2020/07/09/how-to-generate-sequential-data)
+* Hazy: (1) [Hazy builds on new technique to generate sequential and time‑series synthetic data](https://hazy.com/blog/2020/07/09/how-to-generate-sequential-data), (2) [Generating Synthetic Sequential Data using GANs](https://medium.com/towards-artificial-intelligence/generating-synthetic-sequential-data-using-gans-a1d67a7752ac)
 * Boogie: [Synthesizing series of transactions with a Generative Adversarial Network](https://blog.boogiesoftware.com/2020/02/synthesizing-series-of-transactions.html)
 
 ---
