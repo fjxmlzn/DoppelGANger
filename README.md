@@ -94,6 +94,24 @@ Put your data with the desired attribute distribution in `data/web_retraining`, 
 cd example_retraining_attribute
 python main.py
 ```
+
+### Differentially private (DP) version
+To run the differentially private version of DoppelGANger (Section 6.2 in the [paper](http://arxiv.org/abs/1909.13403)), please first install [TensorFlow Privacy library](https://github.com/tensorflow/privacy).
+
+* Train DP DoppelGANger
+
+```
+cd example_dp_training
+python main.py
+```
+
+* Generate data by DP DoppelGANger
+
+```
+cd example_dp_generating_data
+python main_generate_data.py
+```
+
 ### Customize DoppelGANger
 You can play with the configurations (e.g., whether to have the auxiliary discriminator) in `config*.py`.
 

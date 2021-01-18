@@ -4,7 +4,15 @@ from tqdm import tqdm
 import datetime
 import os
 import math
+import sys
 from .util import draw_feature, draw_attribute
+
+try:
+    from tensorflow_privacy.privacy.optimizers import dp_optimizer
+    from tensorflow_privacy.privacy.analysis.compute_dp_sgd_privacy_lib import compute_dp_sgd_privacy
+except:
+    pass
+
 
 class DoppelGANger(object):
     def __init__(self, sess, checkpoint_dir, sample_dir, time_path,
@@ -23,7 +31,9 @@ class DoppelGANger(object):
                  fix_feature_network=False,
                  g_lr=0.001, g_beta1=0.5,
                  d_lr=0.001, d_beta1=0.5,
-                 attr_d_lr=0.001, attr_d_beta1=0.5):
+                 attr_d_lr=0.001, attr_d_beta1=0.5,
+                 dp_noise_multiplier=None, dp_l2_norm_clip=None,
+                 dp_delta=1e-5):
         """Constructor of DoppelGANger
         Args:
             sess: A tensorflow session
@@ -128,7 +138,12 @@ class DoppelGANger(object):
             attr_d_lr: The learning rate in Adam for training the auxiliary
                 discriminator
             attr_d_beta1: The beta1 in Adam for training the auxiliary
-                discriminator 
+                discriminator
+            dp_noise_multiplier: Noise multiplier for DP training. None if
+                to train normally without DP
+            dp_l2_norm_clip: L2 norm clipping threshold for DP training. None if
+                to train normally without DP
+            dp_delta: The delta for DP
         """
         self.sess = sess
         self.checkpoint_dir = checkpoint_dir
@@ -165,6 +180,16 @@ class DoppelGANger(object):
         self.d_beta1 = d_beta1
         self.attr_d_lr = attr_d_lr
         self.attr_d_beta1 = attr_d_beta1
+
+        self.dp_noise_multiplier = dp_noise_multiplier
+        self.dp_l2_norm_clip = dp_l2_norm_clip
+        self.dp_delta = dp_delta
+
+        if dp_noise_multiplier is not None and dp_l2_norm_clip is not None:
+            if ('tensorflow_privacy.privacy.optimizers.dp_optimizer'
+                    not in sys.modules):
+                raise RuntimeError('tensorflow_privacy should be installed for'
+                                   ' DP training')
 
         self.check_data()
 
@@ -430,7 +455,9 @@ class DoppelGANger(object):
             self.g_loss = self.g_loss_d
 
         self.d_loss_fake = tf.reduce_mean(self.d_fake_train_tf)
+        self.d_loss_fake_unflattened = self.d_fake_train_tf
         self.d_loss_real = -tf.reduce_mean(self.d_real_train_tf)
+        self.d_loss_real_unflattened = -self.d_real_train_tf
         alpha_dim2 = tf.random_uniform(
             shape=[batch_size, 1],
             minval=0.,
@@ -457,14 +484,21 @@ class DoppelGANger(object):
                                 reduction_indices=[1])
         slopes = tf.sqrt(slopes1 + slopes2 + self.EPS)
         self.d_loss_gp = tf.reduce_mean((slopes - 1.)**2)
+        self.d_loss_gp_unflattened = (slopes - 1.)**2
 
         self.d_loss = (self.d_loss_fake +
                        self.d_loss_real +
                        self.d_gp_coe * self.d_loss_gp)
 
+        self.d_loss_unflattened = (self.d_loss_fake_unflattened +
+                                   self.d_loss_real_unflattened +
+                                   self.d_gp_coe * self.d_loss_gp_unflattened)
+
         if self.attr_discriminator is not None:
             self.attr_d_loss_fake = tf.reduce_mean(self.attr_d_fake_train_tf)
+            self.attr_d_loss_fake_unflattened = self.attr_d_fake_train_tf
             self.attr_d_loss_real = -tf.reduce_mean(self.attr_d_real_train_tf)
+            self.attr_d_loss_real_unflattened = -self.attr_d_real_train_tf
             alpha_dim2 = tf.random_uniform(
                 shape=[batch_size, 1],
                 minval=0.,
@@ -483,10 +517,16 @@ class DoppelGANger(object):
                                     reduction_indices=[1])
             slopes = tf.sqrt(slopes1 + self.EPS)
             self.attr_d_loss_gp = tf.reduce_mean((slopes - 1.)**2)
+            self.attr_d_loss_gp_unflattened = (slopes - 1.)**2
 
             self.attr_d_loss = (self.attr_d_loss_fake +
                                 self.attr_d_loss_real +
                                 self.attr_d_gp_coe * self.attr_d_loss_gp)
+
+            self.attr_d_loss_unflattened = \
+                (self.attr_d_loss_fake_unflattened +
+                 self.attr_d_loss_real_unflattened +
+                 self.attr_d_gp_coe * self.attr_d_loss_gp_unflattened)
 
         self.g_op = \
             tf.train.AdamOptimizer(self.g_lr, self.g_beta1)\
@@ -494,18 +534,47 @@ class DoppelGANger(object):
                 self.g_loss,
                 var_list=self.generator.trainable_vars)
 
-        self.d_op = \
-            tf.train.AdamOptimizer(self.d_lr, self.d_beta1)\
-            .minimize(
-                self.d_loss,
-                var_list=self.discriminator.trainable_vars)
+        if (self.dp_noise_multiplier is not None and
+                self.dp_l2_norm_clip is not None):
+            print("Using DP optimizer")
+            self.d_op = \
+                dp_optimizer.DPAdamGaussianOptimizer(
+                    l2_norm_clip=self.dp_l2_norm_clip,
+                    noise_multiplier=self.dp_noise_multiplier,
+                    num_microbatches=self.batch_size,
+                    learning_rate=self.d_lr,
+                    beta1=self.d_beta1)\
+                .minimize(
+                    self.d_loss_unflattened,
+                    var_list=self.discriminator.trainable_vars)
+
+        else:
+            self.d_op = \
+                tf.train.AdamOptimizer(self.d_lr, self.d_beta1)\
+                .minimize(
+                    self.d_loss,
+                    var_list=self.discriminator.trainable_vars)
 
         if self.attr_discriminator is not None:
-            self.attr_d_op = \
-                tf.train.AdamOptimizer(self.attr_d_lr, self.attr_d_beta1)\
-                .minimize(
-                    self.attr_d_loss,
-                    var_list=self.attr_discriminator.trainable_vars)
+            if (self.dp_noise_multiplier is not None and
+                    self.dp_l2_norm_clip is not None):
+                print("Using DP optimizer")
+                self.attr_d_op = \
+                    dp_optimizer.DPAdamGaussianOptimizer(
+                        l2_norm_clip=self.dp_l2_norm_clip,
+                        noise_multiplier=self.dp_noise_multiplier,
+                        num_microbatches=self.batch_size,
+                        learning_rate=self.attr_d_lr,
+                        beta1=self.attr_d_beta1)\
+                    .minimize(
+                        self.attr_d_loss_unflattened,
+                        var_list=self.attr_discriminator.trainable_vars)
+            else:
+                self.attr_d_op = \
+                    tf.train.AdamOptimizer(self.attr_d_lr, self.attr_d_beta1)\
+                    .minimize(
+                        self.attr_d_loss,
+                        var_list=self.attr_discriminator.trainable_vars)
 
     def build_summary(self):
         self.g_summary = []
@@ -843,6 +912,24 @@ class DoppelGANger(object):
         batch_num = self.data_feature.shape[0] // self.batch_size
 
         global_id = 0
+
+        if (self.dp_noise_multiplier is not None and
+                self.dp_l2_norm_clip is not None):
+            if self.attr_discriminator:
+                # The effective noise multiplier for DP guarantee is
+                # 0.5*noise_multiplier because each batch of data is utilized
+                # twice for the two discriminators.
+                noise_multiplier = self.dp_noise_multiplier * 0.5
+            else:
+                noise_multiplier = self.dp_noise_multiplier
+            print("Using DP training")
+            print("The final DP parameters will be:")
+            compute_dp_sgd_privacy(
+                self.data_feature.shape[0],
+                self.batch_size,
+                noise_multiplier,
+                self.epoch,
+                self.dp_delta)
 
         for epoch_id in tqdm(range(self.epoch)):
             data_id = np.random.choice(
