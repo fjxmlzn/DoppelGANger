@@ -926,10 +926,11 @@ class DoppelGANger(object):
             print("The final DP parameters will be:")
             compute_dp_sgd_privacy(
                 self.data_feature.shape[0],
-                self.batch_size,
+                self.batch_size * self.num_packing,
                 noise_multiplier,
-                self.epoch,
+                self.epoch * self.num_packing,
                 self.dp_delta)
+            sys.stdout.flush()
 
         for epoch_id in tqdm(range(self.epoch)):
             data_id = np.random.choice(
