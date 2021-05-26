@@ -20,7 +20,7 @@ DoppelGANger has been used by several independent users/companies. Check the fol
 * Boogie: [Synthesizing series of transactions with a Generative Adversarial Network](https://blog.boogiesoftware.com/2020/02/synthesizing-series-of-transactions.html)
 
 ---
-This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5 and Python 3.5.2, TensorFlow 1.4.0.
+This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5 and Python 3.5.2, TensorFlow 1.4.0 (but should also work for all Tensorflow 1.4.0 - 1.15).
 
 ## Dataset format
 Note that `metadata` in the paper are denoted as `attribute` in the code; `measurement` in the paper are denoted as `feature` in the code.
