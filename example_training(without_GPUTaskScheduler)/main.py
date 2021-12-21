@@ -1,7 +1,9 @@
 import sys
+
 sys.path.append("..")
 
 from gan import output
+
 sys.modules["output"] = output
 
 from gan.doppelganger import DoppelGANger
@@ -10,7 +12,6 @@ from gan.load_data import load_data
 from gan.network import DoppelGANgerGenerator, Discriminator, AttrDiscriminator
 import os
 import tensorflow as tf
-
 
 if __name__ == "__main__":
     sample_len = 10
@@ -67,8 +68,8 @@ if __name__ == "__main__":
     extra_checkpoint_freq = 5
     num_packing = 1
 
-    run_config = tf.ConfigProto()
-    with tf.Session(config=run_config) as sess:
+    run_config = tf.compat.v1.ConfigProto()
+    with tf.compat.v1.Session(config=run_config) as sess:
         gan = DoppelGANger(
             sess=sess,
             checkpoint_dir=checkpoint_dir,
