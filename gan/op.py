@@ -1,20 +1,21 @@
 import tensorflow as tf
 import numpy as np
+import tensorflow_addons as tfa
 
 
 def linear(input_, output_size, scope_name="linear"):
-    with tf.variable_scope(scope_name):
+    with tf.compat.v1.variable_scope(scope_name):
         input_ = tf.reshape(
             input_,
             [-1, np.prod(input_.get_shape().as_list()[1:])])
-        output = tf.layers.dense(
+        output = tf.compat.v1.layers.dense(
             input_,
             output_size)
         return output
 
 
 def flatten(input_, scope_name="flatten"):
-    with tf.variable_scope(scope_name):
+    with tf.compat.v1.variable_scope(scope_name):
         output = tf.reshape(
             input_,
             [-1, np.prod(input_.get_shape().as_list()[1:])])
@@ -25,19 +26,18 @@ class batch_norm(object):
     # Code from:
     # https://github.com/carpedm20/DCGAN-tensorflow
     def __init__(self, epsilon=1e-5, momentum=0.9, name="batch_norm"):
-        with tf.variable_scope(name):
+        with tf.compat.v1.variable_scope(name):
             self.epsilon = epsilon
             self.momentum = momentum
             self.name = name
 
     def __call__(self, x, train=True):
-        return tf.contrib.layers.batch_norm(x,
-                                            decay=self.momentum,
-                                            updates_collections=None,
-                                            epsilon=self.epsilon,
-                                            scale=True,
-                                            is_training=train,
-                                            scope=self.name)
+        # I removed updates_collections=None since I didn't find the alternative
+        return tf.keras.layers.BatchNormalization(momentum=self.momentum,
+                                                  epsilon=self.epsilon,
+                                                  scale=True,
+                                                  trainable=train,
+                                                  name=self.name)(x)
 
 
 class layer_norm(object):
@@ -45,7 +45,7 @@ class layer_norm(object):
         self.name = name
 
     def __call__(self, x):
-        return tf.contrib.layers.layer_norm(x, scope=self.name)
+        return tf.keras.layers.LayerNormalization(name=self.name)(x)
 
 
 def deconv2d(input_, output_shape,
@@ -53,12 +53,12 @@ def deconv2d(input_, output_shape,
              name="deconv2d"):
     # Code from:
     # https://github.com/carpedm20/DCGAN-tensorflow
-    with tf.variable_scope(name):
+    with tf.compat.v1.variable_scope(name):
         # filter : [height, width, output_channels, in_channels]
-        w = tf.get_variable(
+        w = tf.compat.v1.get_variable(
             'w',
             [k_h, k_w, output_shape[-1], input_.get_shape()[-1]],
-            initializer=tf.random_normal_initializer(stddev=stddev))
+            initializer=tf.compat.v1.random_normal_initializer(stddev=stddev))
 
         try:
             deconv = tf.nn.conv2d_transpose(
@@ -75,10 +75,10 @@ def deconv2d(input_, output_shape,
                 output_shape=output_shape,
                 strides=[1, d_h, d_w, 1])
 
-        biases = tf.get_variable(
+        biases = tf.compat.v1.get_variable(
             'biases',
             [output_shape[-1]],
-            initializer=tf.constant_initializer(0.0))
+            initializer=tf.compat.v1.constant_initializer(0.0))
         deconv = tf.reshape(tf.nn.bias_add(deconv, biases), output_shape)
 
         return deconv
@@ -89,19 +89,19 @@ def conv2d(input_, output_dim,
            name="conv2d"):
     # Code from:
     # https://github.com/carpedm20/DCGAN-tensorflow
-    with tf.variable_scope(name):
-        w = tf.get_variable(
+    with tf.compat.v1.variable_scope(name):
+        w = tf.compat.v1.get_variable(
             'w',
             [k_h, k_w, input_.get_shape()[-1], output_dim],
-            initializer=tf.truncated_normal_initializer(stddev=stddev))
+            initializer=tf.compat.v1.truncated_normal_initializer(stddev=stddev))
         conv = tf.nn.conv2d(
-            input_,
-            w,
+            input=input_,
+            filters=w,
             strides=[1, d_h, d_w, 1],
             padding='SAME')
 
-        biases = tf.get_variable(
-            'biases', [output_dim], initializer=tf.constant_initializer(0.0))
+        biases = tf.compat.v1.get_variable(
+            'biases', [output_dim], initializer=tf.compat.v1.constant_initializer(0.0))
         conv = tf.reshape(
             tf.nn.bias_add(conv, biases),
             [-1] + conv.get_shape().as_list()[1:])

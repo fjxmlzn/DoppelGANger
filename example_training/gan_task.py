@@ -81,8 +81,8 @@ class GANTask(GPUTask):
             os.makedirs(sample_dir)
         time_path = os.path.join(self._work_dir, "time.txt")
 
-        run_config = tf.ConfigProto()
-        with tf.Session(config=run_config) as sess:
+        run_config = tf.compat.v1.ConfigProto()
+        with tf.compat.v1.Session(config=run_config) as sess:
             gan = DoppelGANger(
                 sess=sess,
                 checkpoint_dir=checkpoint_dir,
