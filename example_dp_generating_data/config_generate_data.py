@@ -1,8 +1,10 @@
+import os
+
 config = {
     "scheduler_config": {
         "gpu": ["0"],
         "config_string_value_maxlen": 1000,
-        "result_root_folder": "../results/",
+        "result_root_folder": os.path.join("..", "results"),
         "scheduler_log_file_path": "scheduler_generate_data.log",
         "log_file": "worker_generate_data.log",
         "force_rerun": True

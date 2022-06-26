@@ -18,7 +18,7 @@ if __name__ == "__main__":
     (data_feature, data_attribute,
      data_gen_flag,
      data_feature_outputs, data_attribute_outputs) = \
-        load_data("../data/web")
+        load_data(os.path.join("..", "data", "web"))
     print(data_feature.shape)
     print(data_attribute.shape)
     print(data_gen_flag.shape)
@@ -48,13 +48,13 @@ if __name__ == "__main__":
     discriminator = Discriminator()
     attr_discriminator = AttrDiscriminator()
 
-    checkpoint_dir = "./test/checkpoint"
+    checkpoint_dir = os.path.join(".", "test", "checkpoint")
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
-    sample_dir = "./test/sample"
+    sample_dir = os.path.join(".", "test", "sample")
     if not os.path.exists(sample_dir):
         os.makedirs(sample_dir)
-    time_path = "./test/time.txt"
+    time_path = os.path.join(".", "test", "time.txt")
     epoch = 400
     batch_size = 100
     vis_freq = 200

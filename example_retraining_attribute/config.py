@@ -1,8 +1,10 @@
+import os
+
 config = {
     "scheduler_config": {
         "gpu": ["0"],
         "config_string_value_maxlen": 1000,
-        "result_root_folder": "../results_retraining/"
+        "result_root_folder": os.path.join("..", "results_retraining")
     },
 
     "global_config": {
@@ -31,7 +33,7 @@ config = {
         "attr_disc_num_layers": 5,
         "attr_disc_num_units": 200,
 
-        "feature_network_checkpoint_path":"../results/aux_disc-True,dataset-web,epoch-400,epoch_checkpoint_freq-1,extra_checkpoint_freq-5,run-0,sample_len-10,self_norm-True,/checkpoint/epoch_id-399/model-199999"
+        "feature_network_checkpoint_path": os.path.join("..", "results", "aux_disc-True,dataset-web,epoch-400,epoch_checkpoint_freq-1,extra_checkpoint_freq-5,run-0,sample_len-10,self_norm-True,", "checkpoint", "epoch_id-399", "model-199999")
     },
 
     "test_config": [
