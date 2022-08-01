@@ -48,13 +48,13 @@ if __name__ == "__main__":
     discriminator = Discriminator()
     attr_discriminator = AttrDiscriminator()
 
-    checkpoint_dir = os.path.join(".", "test", "checkpoint")
+    checkpoint_dir = os.path.join("..", "test", "checkpoint")
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
-    sample_dir = os.path.join(".", "test", "sample")
+    sample_dir = os.path.join("..", "test", "sample")
     if not os.path.exists(sample_dir):
         os.makedirs(sample_dir)
-    time_path = os.path.join(".", "test", "time.txt")
+    time_path = os.path.join("..", "test", "time.txt")
     epoch = 400
     batch_size = 100
     vis_freq = 200
