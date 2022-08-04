@@ -1,4 +1,4 @@
-# Using GANs for Sharing Networked Time Series Data: Challenges, Initial Promise, and Open Questions
+# Using GANs for Sharing Networked Time Series Data: Challenges, Initial Promise, and Open Questions .
 
 Previous title:
 **Generating High-fidelity, Synthetic Time Series Datasets with DoppelGANger**
