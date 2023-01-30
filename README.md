@@ -44,6 +44,7 @@ data_attribute_output = [
 	Output(type_=CONTINUOUS, dim=2, normalization=MINUSONE_ONE, is_gen_flag=False),
 	Output(type_=DISCRETE, dim=3, normalization=None, is_gen_flag=False)]
 ```
+Leas secret edit of Readme
 
 Note that `is_gen_flag` should always set to `False` (default). `is_gen_flag=True` is for internal use only (see comments in `doppelganger.py` for details).
 
