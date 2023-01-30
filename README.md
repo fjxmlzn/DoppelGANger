@@ -36,7 +36,7 @@ To train DoppelGANger for your data, you need to prepare your data  according to
 Let's look at a concrete example. Assume that there are two features (a 1-dimension continuous feature normalized to [0,1] and a 2-dimension categorical feature) and two attributes (a 2-dimension continuous attribute normalized to [-1, 1] and a 3-dimension categorical attributes). Then `data_feature_output ` and `data_attribute_output ` should be:
 
 ```
-data_feature_output = [
+FELIX2data_feature_output = [
 	Output(type_=CONTINUOUS, dim=1, normalization=ZERO_ONE, is_gen_flag=False),
 	Output(type_=DISCRETE, dim=2, normalization=None, is_gen_flag=False)]
 	
