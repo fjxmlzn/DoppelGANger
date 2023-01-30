@@ -1,5 +1,5 @@
 # Using GANs for Sharing Networked Time Series Data: Challenges, Initial Promise, and Open Questions
-
+# Narges
 Previous title:
 **Generating High-fidelity, Synthetic Time Series Datasets with DoppelGANger**
 
