@@ -19,6 +19,7 @@ DoppelGANger has been used by several independent users/companies. Check the fol
 * Hazy: (1) [Hazy builds on new technique to generate sequential and time‑series synthetic data](https://hazy.com/blog/2020/07/09/how-to-generate-sequential-data), (2) [Generating Synthetic Sequential Data using GANs](https://medium.com/towards-artificial-intelligence/generating-synthetic-sequential-data-using-gans-a1d67a7752ac)
 * Boogie: [Synthesizing series of transactions with a Generative Adversarial Network](https://blog.boogiesoftware.com/2020/02/synthesizing-series-of-transactions.html)
 * Gretel.ai: [Generate Synthetic Time-series Data with Open-source Tools](https://www.kdnuggets.com/2022/06/generate-synthetic-timeseries-data-opensource-tools.html)
+* YData: [Using DoppelGANger to generate synthetic time-series data](https://docs.synthetic.ydata.ai/1.3/examples/doppelganger_example/)
 
 ---
 This repo contains the codes of DoppelGANger. The codes were tested under Python 2.7.5 and Python 3.5.2, TensorFlow 1.4.0 (but should also work for all Tensorflow 1.4.0 - 1.15).
